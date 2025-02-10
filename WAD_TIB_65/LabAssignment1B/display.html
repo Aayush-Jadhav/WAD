@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display User Data</title>
+</head>
+<body>
+    <h1>Stored User Data</h1>
+    <div id="userData"></div>
+
+    <script>
+        // Retrieve stored data from localStorage
+        let storedData = JSON.parse(localStorage.getItem('userData')) || [];
+
+        // Function to render the data
+        function renderData() {
+            let displayDiv = document.getElementById('userData');
+            displayDiv.innerHTML = '';  // Clear previous content
+
+            if (storedData.length > 0) {
+                storedData.forEach((user, index) => {
+                    let userInfo = `
+                        <h3>User ${index + 1}</h3>
+                        <p><strong>Name:</strong> ${user.name}</p>
+                        <p><strong>Address:</strong> ${user.address}</p>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Password:</strong> ${user.password}</p>
+                        <p><strong>Subject:</strong> ${user.subject}</p>
+                        <p><strong>College:</strong> ${user.comment}</p>
+                        <p><strong>Agreement:</strong> ${user.agree ? 'Agreed' : 'Not Agreed'}</p>
+                        <button onclick="deleteUser(${index})">Delete</button>
+                        <hr>
+                    `;
+                    displayDiv.innerHTML += userInfo;
+                });
+            } else {
+                displayDiv.innerHTML = 'No data found.';
+            }
+        }
+
+        // Function to delete a user
+        function deleteUser(index) {
+            storedData.splice(index, 1);  // Remove the user from the array
+            localStorage.setItem('userData', JSON.stringify(storedData));  // Save the updated array
+            renderData();  // Re-render the data after deletion
+        }
+
+        // Initial render of the data
+        renderData();
+    </script>
+</body>
+</html>
